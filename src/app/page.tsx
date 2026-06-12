@@ -1,26 +1,29 @@
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 export default async function Home() {
-  const { data: manufacturers, error } = await supabase
+  const { data: manufacturers } = await supabase
     .from("manufacturers")
     .select("*")
     .order("name");
 
   return (
-    <main style={{ padding: "40px" }}>
-      <h1>Car Intel India</h1>
+    <main className="p-8">
+      <h1 className="text-4xl font-bold mb-6">
+        Car Intel India
+      </h1>
 
-      <h2>Manufacturers</h2>
-
-      {error && (
-        <pre>{JSON.stringify(error, null, 2)}</pre>
-      )}
-
-      <ul>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {manufacturers?.map((m) => (
-          <li key={m.id}>{m.name}</li>
+          <Link
+            key={m.id}
+            href={`/manufacturer/${m.slug}`}
+            className="border rounded p-4 hover:bg-gray-100"
+          >
+            {m.name}
+          </Link>
         ))}
-      </ul>
+      </div>
     </main>
   );
 }
